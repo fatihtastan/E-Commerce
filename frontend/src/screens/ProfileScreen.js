@@ -21,28 +21,13 @@ const ProfileScreen = ({ location, history }) => {
   const { userInfo } = userLogin;
 
   const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
-  const { success } = userUpdateProfile;
-
-  // useEffect(() => {
-  //   if (!userInfo) {
-  //     history.push('/login');
-  //   }
-  // }, [userInfo]);
-
-  // useEffect(() => {
-  //   if (!user?.name) {
-  //     dispatch(getUserDetails('profile'));
-  //   } else {
-  //     setName(user.name);
-  //     setEmail(user.email);
-  //   }
-  // }, [dispatch, user]);
+  const updater = userUpdateProfile;
 
   useEffect(() => {
     if (!userInfo) {
       history.push('/login');
     } else {
-      if (!user || !user.name || success) {
+      if (!user || !user.name || updater.success) {
         // dispatch({ type: USER_UPDATE_PROFILE_RESET });
         dispatch(getUserDetails('profile'));
         // dispatch(listMyOrders());
@@ -51,7 +36,7 @@ const ProfileScreen = ({ location, history }) => {
         setEmail(user.email);
       }
     }
-  }, [dispatch, history, userInfo, user, success]);
+  }, [dispatch, history, userInfo, user, updater.success]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -68,8 +53,10 @@ const ProfileScreen = ({ location, history }) => {
         <h2>User Profile</h2>
         {message && <Message variant='danger'>{message}</Message>}
         {error && <Message variant='danger'>{error}</Message>}
-        {success && <Message variant='success'>Profile Updated</Message>}
-        {loading && <Loader />}
+        {updater.success && (
+          <Message variant='success'>Profile Updated</Message>
+        )}
+        {updater.loading && <Loader />}
         <Form onSubmit={submitHandler}>
           <Form.Group controlId='name'>
             <Form.Label>Name</Form.Label>

@@ -15,6 +15,18 @@ import Loader from '../components/Loader';
 import Message from '../components/Message';
 import { ListProductDetails } from '../actions/productActions';
 
+export const generateOptions = (stockCount) => {
+  const options = [];
+  for (let i = 1; i <= stockCount; i++) {
+    options.push(
+      <option key={i} value={stockCount}>
+        {i}
+      </option>
+    );
+  }
+  return options;
+};
+
 const ProductScreen = ({ history, match }) => {
   const [qty, setQty] = useState(1);
 
@@ -52,7 +64,7 @@ const ProductScreen = ({ history, match }) => {
               <ListGroup.Item>
                 <Rating
                   variant={product.rating}
-                  text={`${product.numReviews} reviews`}
+                  text={`${product.numReviews}`}
                 />
               </ListGroup.Item>
               <ListGroup.Item>Price: ${product.price}</ListGroup.Item>
@@ -83,11 +95,7 @@ const ProductScreen = ({ history, match }) => {
                           value={qty}
                           onChange={(e) => setQty(e.target.value)}
                         >
-                          {[...Array(product.countInStock).keys()].map((x) => (
-                            <option key={x + 1} value={x + 1}>
-                              {x + 1}
-                            </option>
-                          ))}
+                          {generateOptions(product.countInStock)}
                         </Form.Control>
                       </Col>
                     </Row>
